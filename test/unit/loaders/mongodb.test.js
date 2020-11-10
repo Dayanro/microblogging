@@ -1,9 +1,9 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
-import { mongodb } from "../../../src/loaders";
-import {mongoConnection} from "../../../src/utils/dbConnection"
+import {connectDB } from "../../../src/loaders";
 import mongoose from "mongoose";
+import { async } from "regenerator-runtime";
 
 const DATABASE = "microblogging";
 const CONNECTION = {
@@ -12,12 +12,19 @@ const CONNECTION = {
 
 describe("MongoDB connection", () => {
   beforeEach(() => {
-    mongoose.connect = jest.fn().mockResolvedValue(CONNECTION);
+    mongoose.connect = jest.fn().mockResolvedValueOnce(CONNECTION);
+ 
     global.logger.info = jest.fn();
     global.logger.error = jest.fn();
   });
 
-  it("should create a connection with database", () => {
+  it("should create a connection with database", async () => {
+    const spyMongooseConnect = jest
+      .spyOn(mongoose, "connect");
+
+    await connectDB();
+
+    expect(spyMongooseConnect).toHaveBeenCalled();
   });
 
   it("should throw an error when there is a connection error", async () => {
@@ -26,7 +33,7 @@ describe("MongoDB connection", () => {
       .spyOn(mongoose, "connect")
       .mockRejectedValueOnce(new Error());
     try {
-      await mongodb();
+      await connectDB();
     } catch (error) {
       expect(spyMongoose).toHaveBeenCalled();
       expect(spyError).toHaveBeenCalled();

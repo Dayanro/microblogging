@@ -1,2 +1,3 @@
 export { logger } from "./logger";
-export { mongodb } from "./mongodb"
+export { connectDB } from "./mongodb";
+export { middlewares } from "./middleware";
