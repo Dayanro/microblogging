@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-loaders.mongodb();
+loaders.connectDB();
+loaders.middlewares(app);
 
 export default app;
