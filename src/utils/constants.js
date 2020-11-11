@@ -8,6 +8,7 @@ export const SALT = 10;
 export const INVALID_CREDENTIALS = "Invalid Credentials";
 export const BAD_REQUEST = "Invalid request missing data";
 export const MISSING_PAGINATION = "Missing pagination parameters";
+export const MISSING_PARAM="Missing note ID"
 
 // Routes
 export const PREFIX_API_URL = "/api"; 

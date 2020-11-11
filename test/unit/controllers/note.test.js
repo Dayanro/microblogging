@@ -2,7 +2,12 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 import httpMock from "node-mocks-http";
-import { fakeNoteModel, fakePage, fakeLimit } from "../../mocks/notes";
+import {
+  fakeNoteModel,
+  fakePage,
+  fakeLimit,
+  fakeNoteId,
+} from "../../mocks/notes";
 import { fakeUserId } from "../../mocks/authentications";
 import * as noteService from "../../../src/services/note";
 import * as noteController from "../../../src/controllers/note";
@@ -56,7 +61,7 @@ describe("Notes controller", () => {
     });
   });
 
-  describe("getNotes", () => {
+  describe("Get Notes", () => {
     beforeEach(() => {
       req.query = { page: fakePage, limit: fakeLimit };
     });
@@ -99,5 +104,52 @@ describe("Notes controller", () => {
       }
     });
   });
+
+
+   describe("Get Note", () => {
+     beforeEach(() => {
+       req.params = { id: fakeNoteId };
+     });
+     it("should call retrieveNote with the ID", async () => {
+       const spyGetNote = jest
+         .spyOn(noteService, "retrieveNote")
+         .mockResolvedValueOnce(fakeNoteModel);
+
+       await noteController.getNote(req, res, next);
+
+       expect(spyGetNote).toHaveBeenCalledWith(fakeNoteId);
+     });
+
+     it("should return status 200 if the note is retrieved", async () => {
+       jest
+         .spyOn(noteService, "retrieveNote")
+         .mockResolvedValueOnce(fakeNoteModel);
+
+       await noteController.getNote(req, res, next);
+
+       expect(res.statusCode).toBe(200);
+     });
+
+     it("should send the response of retrieveNote", async () => {
+       jest.spyOn(noteService, "retrieveNote").mockResolvedValueOnce(null);
+
+       await noteController.getNote(req, res, next);
+
+       expect(res._getJSONData()).toStrictEqual(null);
+     });
+
+     it("should pass error to the next middleware", async () => {
+       jest
+         .spyOn(noteService, "retrieveNote")
+         .mockRejectedValueOnce(new Error());
+
+       try {
+         await noteController.getNote(req, res, next);
+       } catch (error) {
+         expect(error).toBeInstanceOf(Error);
+         expect(next).toHaveBeenCalledWith(error);
+       }
+     });
+   });
 
 });

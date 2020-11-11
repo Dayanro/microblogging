@@ -1,2 +1,2 @@
 export { findUserByUsernameWithPassword } from "./user"
-export { saveNote, findNotes } from "./note";
+export { saveNote, findNotes, findNote } from "./note";

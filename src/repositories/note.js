@@ -19,3 +19,11 @@ export const findNotes = async (pageSize, documenToSkip) => {
     throw error;
   }
 };
+
+export const findNote = async (noteId) => {
+  try {
+    return await NoteModel.findById(noteId).populate("author");
+  } catch (error) {
+    throw error;
+  }
+};
