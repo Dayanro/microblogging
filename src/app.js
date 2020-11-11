@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 loaders.connectDB();
+loaders.router(app);
 loaders.middlewares(app);
 
 export default app;

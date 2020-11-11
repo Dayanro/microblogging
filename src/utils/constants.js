@@ -7,3 +7,7 @@ export const SALT = 10;
 //Error Messages
 export const INVALID_CREDENTIALS = "Invalid Credentials";
 export const BAD_REQUEST = "Invalid request missing data";
+
+// Routes
+export const PREFIX_API_URL = "/api"; 
+
