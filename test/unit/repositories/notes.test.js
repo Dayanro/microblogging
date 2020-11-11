@@ -5,7 +5,7 @@ import { fakeNote } from "../../mocks/notes";
 import * as noteRepository from "../../../src/repositories/note";
 jest.mock("../../../src/models/note");
 
-describe("Create note", () => {
+describe("Notes Reopositories", () => {
   describe("saveNote", () => {
     it("should insert one `note` document", async () => {
       const spyCreate = jest
@@ -28,4 +28,34 @@ describe("Create note", () => {
     });
   });
 
+  describe("findNotes", () => {
+    it("should return an array of notes", async () => {
+      NoteModel.find = jest.fn().mockImplementation(() => ({
+        populate: jest.fn().mockImplementation(() => ({
+          limit: jest.fn().mockImplementation(() => ({
+            skip: jest.fn().mockResolvedValueOnce([]),
+          })),
+        })),
+      }));
+      const result = await noteRepository.findNotes(5, 0);
+
+      expect(result).toStrictEqual([]);
+    });
+
+    it("should throw an error when ther is a problem retrieve the notes", async () => {
+      NoteModel.find = jest.fn().mockImplementation(() => ({
+        populate: jest.fn().mockImplementation(() => ({
+          limit: jest.fn().mockImplementation(() => ({
+            skip: jest.fn().mockResolvedValueOnce(new Error()),
+          })),
+        })),
+      }));
+      try {
+        await noteRepository.findNotes(5, 0);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+      }
+    });
+  });
 });
+

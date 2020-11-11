@@ -5,6 +5,8 @@ import { fakeUserId } from "./authentications";
 export const fakeContent = "fakecontent";
 export const fakeNoteId = "12345fdg780hj097";
 export const fakedate = new Date();
+export const fakePage = 1;
+export const fakeLimit = 20;
 
 
 export const fakeNote = {

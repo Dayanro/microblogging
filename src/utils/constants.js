@@ -7,7 +7,12 @@ export const SALT = 10;
 //Error Messages
 export const INVALID_CREDENTIALS = "Invalid Credentials";
 export const BAD_REQUEST = "Invalid request missing data";
+export const MISSING_PAGINATION = "Missing pagination parameters";
 
 // Routes
 export const PREFIX_API_URL = "/api"; 
+
+//Pagination
+export const LIMIT_ITEMS =50;
+
 

@@ -2,7 +2,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 import httpMock from "node-mocks-http";
-import { fakeNoteModel} from "../../mocks/notes";
+import { fakeNoteModel, fakePage, fakeLimit } from "../../mocks/notes";
 import { fakeUserId } from "../../mocks/authentications";
 import * as noteService from "../../../src/services/note";
 import * as noteController from "../../../src/controllers/note";
@@ -49,6 +49,50 @@ describe("Notes controller", () => {
 
       try {
         await noteController.createNote(req, res, next);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(next).toHaveBeenCalledWith(error);
+      }
+    });
+  });
+
+  describe("getNotes", () => {
+    beforeEach(() => {
+      req.query = { page: fakePage, limit: fakeLimit };
+    });
+    it("should call retrieveNotes with page and limit", async () => {
+      const spyGetNotes = jest
+        .spyOn(noteService, "retrieveNotes")
+        .mockResolvedValueOnce([]);
+
+      await noteController.getNotes(req, res, next);
+
+      expect(spyGetNotes).toHaveBeenCalledWith(fakePage, fakeLimit);
+    });
+
+    it("should return status 200 if the notes are retrieved", async () => {
+      jest.spyOn(noteService, "retrieveNotes").mockResolvedValueOnce([]);
+
+      await noteController.getNotes(req, res, next);
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it("should send the response of retrieveNotes", async () => {
+      jest.spyOn(noteService, "retrieveNotes").mockResolvedValueOnce([]);
+
+      await noteController.getNotes(req, res, next);
+
+      expect(res._getJSONData()).toStrictEqual([]);
+    });
+
+    it("should pass error to the next middleware", async () => {
+      jest
+        .spyOn(noteService, "retrieveNotes")
+        .mockRejectedValueOnce(new Error());
+
+      try {
+        await noteController.getNotes(req, res, next);
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
         expect(next).toHaveBeenCalledWith(error);

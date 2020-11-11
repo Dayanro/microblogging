@@ -8,3 +8,14 @@ export const saveNote = async (note) => {
     throw error;
   }
 };
+
+export const findNotes = async (pageSize, documenToSkip) => {
+  try {
+    return await NoteModel.find()
+      .populate("author")
+      .limit(pageSize)
+      .skip(documenToSkip);
+  } catch (error) {
+    throw error;
+  }
+};
