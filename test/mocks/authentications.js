@@ -1,5 +1,6 @@
 import { UserModel } from "../../src/models/user";
 
+export const fakeUserId = "5fa07908c11f664b7d0cbb65";
 export const fakeUsername = "Dayan";
 export const fakePassword = "dayan123";
 let data = `${fakeUsername}:${fakePassword}`;

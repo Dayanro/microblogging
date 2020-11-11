@@ -1,0 +1,1 @@
+export { noteRoute } from "./note";

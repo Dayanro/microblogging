@@ -4,7 +4,7 @@ import "regenerator-runtime/runtime";
 import httpMock from "node-mocks-http";
 import { fakeAuthHeader, fakeUserExtract } from "../../mocks/authentications";
 import * as authService from "../../../src/services/auth";
-import { LoginAuth } from "../../../src/middleware/validation";
+import {authValidation} from "../../../src/middleware/validation";
 
 describe("Middleware Login Auth", () => {
   let res, req, next;
@@ -20,7 +20,7 @@ describe("Middleware Login Auth", () => {
   });
   it("should call next if authorization is not provided", () => {
     req.headers.authorization = "";
-    LoginAuth(req, res, next);
+    authValidation(req, res, next);
 
     expect(next).toHaveBeenCalled();
   });
@@ -31,7 +31,7 @@ describe("Middleware Login Auth", () => {
         throw new Error();
       });
     try {
-      LoginAuth(req, res, next);
+      authValidation(req, res, next);
     } catch (error) {
       expect(spyLoginAuth).toBeCalled();
       expect(error).toBeInstanceOf(Error);
@@ -42,7 +42,7 @@ describe("Middleware Login Auth", () => {
       .spyOn(authService, "login")
       .mockResolvedValueOnce(fakeUserExtract);
 
-    await LoginAuth(req, res, next);
+    await authValidation(req, res, next);
 
     expect(req.user.fakeUser).toHaveProperty("username");
   });
