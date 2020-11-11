@@ -6,6 +6,7 @@ const {
   DB_HOSTNAME,
   DB_NAME,
 } = process.env;
+mongoose.set("useFindAndModify", false);
 
 const databaseUrl = `${PROTOCOL}//${DB_USERNAME}:${DB_PASSWORD}@${DB_HOSTNAME}/${DB_NAME}`;
 

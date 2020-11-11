@@ -8,5 +8,4 @@ router.post("/", authValidation, createNote);
 router.get("/", authValidation, getNotes);
 router.get("/:id", authValidation, getNote);
 
-
 export const noteRoute = { path: "/notes", router };
