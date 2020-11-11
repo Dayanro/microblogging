@@ -7,7 +7,7 @@ jest.mock("../../../src/models/note");
 
 describe("Notes Reopositories", () => {
   describe("Save Note", () => {
-    it("should insert one `note` document", async () => {
+    it("should insert one 'note' document", async () => {
       const spyCreate = jest
         .spyOn(NoteModel, "create")
         .mockReturnValueOnce(fakeNote);

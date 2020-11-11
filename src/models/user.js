@@ -15,6 +15,7 @@ const UserSchema = new Schema(
       select: false,
       required: true,
     },
+    favorites: [{ type: Schema.Types.ObjectId, ref: "Note" }],
   },
   { timestamps: true }
 );

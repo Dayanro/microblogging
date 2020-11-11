@@ -144,7 +144,7 @@ describe("Notes controller", () => {
          .mockRejectedValueOnce(new Error());
 
        try {
-         await noteController.getNote(req, res, next);
+         await noteController.getNotes(req, res, next);
        } catch (error) {
          expect(error).toBeInstanceOf(Error);
          expect(next).toHaveBeenCalledWith(error);

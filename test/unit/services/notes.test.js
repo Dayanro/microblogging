@@ -111,6 +111,5 @@ describe("Notes service", () => {
     });
 
   });
-
   
 });
