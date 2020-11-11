@@ -1,4 +1,4 @@
-import { addNote, retrieveNotes } from "../services";
+import { addNote, retrieveNotes, retrieveNote } from "../services";
 
 export const createNote = async (req, res, next) => {
   try {
@@ -19,3 +19,13 @@ export const getNotes = async (req, res, next) => {
     next(error);
   }
 }
+
+export const getNote = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const notes = await retrieveNote(id);
+    res.status(200).json(notes);
+  } catch (error) {
+    next(error);
+  }
+};

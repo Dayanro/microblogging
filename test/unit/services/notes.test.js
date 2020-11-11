@@ -2,14 +2,18 @@
 const { async } = require("regenerator-runtime");
 import * as NoteRepository from "../../../src/repositories/note";
 import * as noteService from "../../../src/services/note";
-import { fakeNoteModel } from "../../mocks/notes";
+import { fakeNoteModel, fakeNoteId } from "../../mocks/notes";
 import { fakeUserId } from "../../mocks/authentications";
 import { BadRequestError } from "../../../src/errors/badRequestError";
-import { LIMIT_ITEMS, MISSING_PAGINATION } from "../../../src/utils/constants";
+import {
+  LIMIT_ITEMS,
+  MISSING_PAGINATION,
+  MISSING_PARAM,
+} from "../../../src/utils/constants";
 
 
 describe("Notes service", () => {
-  describe("addNote", () => {
+  describe("Add Note", () => {
     it("should assign author to the notes and send a object to saveNote", async () => {
       const spyRepository = jest
         .spyOn(NoteRepository, "saveNote")
@@ -40,7 +44,7 @@ describe("Notes service", () => {
   });
 
 
-  describe("retrieveNotes", () => {
+  describe("retrieve Notes", () => {
     it(`should determine the max limit ${LIMIT_ITEMS} in case that provided number would be greater than`, async () => {
       const spyRepository = jest
         .spyOn(NoteRepository, "findNotes")
@@ -72,6 +76,40 @@ describe("Notes service", () => {
         expect(error).toBeInstanceOf(Error);
       }
     });
+  });
+
+  describe("retrieve Note", () => {
+    it("should throw an error if a pararameter is not provided", async () => {
+      try {
+        await noteService.retrieveNote("");
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(MISSING_PARAM);
+      }
+    });
+
+    it("Should throw an error if something goes wrong when retrieving the notes", async () => {
+       jest.spyOn(NoteRepository, "findNote")
+        .mockResolvedValueOnce(new Error());
+      try {
+        await noteService.retrieveNote(fakeNoteId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+      }
+    });
+
+    it("Should retrieve a note", async () => {
+      const spyRepository = jest
+        .spyOn(NoteRepository, "findNote")
+        .mockResolvedValueOnce(fakeNoteModel);
+      
+        const data = await noteService.retrieveNote(fakeNoteId);
+      
+        expect(spyRepository).toBeCalledWith(fakeNoteId);
+        expect(data).toStrictEqual(fakeNoteModel);
+      
+    });
+
   });
 
   

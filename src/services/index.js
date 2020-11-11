@@ -1,2 +1,2 @@
 export { login } from "./auth"
-export { addNote, retrieveNotes } from "./note";
+export { addNote, retrieveNotes, retrieveNote } from "./note";

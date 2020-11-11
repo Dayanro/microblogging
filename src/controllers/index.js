@@ -1,2 +1,2 @@
-export { createNote, getNotes } from "./note";
+export { createNote, getNotes, getNote } from "./note";
 
