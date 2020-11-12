@@ -51,4 +51,27 @@ describe("favorite service", () => {
       }
     });
   });
+
+describe("get favorites", () => {
+  it("should throw an error if a pararameter is not provided", async () => {
+    try {
+      await userService.getfavoriteNotes(null);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestError);
+    }
+  });
+
+  it("Should throw an error if something goes wrong when retrieve the favorite", async () => {
+    const spyRepository = jest
+      .spyOn(userRepository, "findUserByIdAndDeleteFavorites")
+      .mockResolvedValueOnce(new Error());
+    try {
+      await userService.getfavoriteNotes(fakeUserId, fakeNoteId);
+    } catch (error) {
+      expect(spyRepository).toHaveBeenCalledWith(fakeUserId, fakeNoteId);
+      expect(error).toBeInstanceOf(Error);
+    }
+  });
+});
+
 });

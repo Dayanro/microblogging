@@ -1,4 +1,4 @@
-import { UserModel } from "../models";
+import { UserModel,  NoteModel  } from "../models";
 
 
 export const findUserByUsernameWithPassword = async (username) => {
@@ -29,4 +29,13 @@ export const findUserByIdAndDeleteFavorites = async (userId, noteId) => {
     throw error;
   }
 };
+
+export const findFavoritesByUser = async (userId) => {
+  try {
+    const user = await UserModel.findOne(userId).populate("favorites")
+    return user.favorites;
+  } catch (error) {
+    throw error
+  }
+}
 
